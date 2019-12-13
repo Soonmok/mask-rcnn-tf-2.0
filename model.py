@@ -7,7 +7,7 @@ from collections import OrderedDict
 import numpy as np
 import tensorflow as tf
 import tensorflow.keras.backend as K
-from tensorflow.keras.layers import Conv2D, Lambda, Input, UpSampling2D, MaxPooling2D, Concatenate
+from tensorflow.keras.layers import Conv2D, Lambda, Input, UpSampling2D, MaxPooling2D, Concatenate, add
 from tensorflow.keras.models import Model
 
 import utils
@@ -125,12 +125,12 @@ class MaskRCNN():
         # Top-down Layers
         # TODO: add assert to varify feature map sizes match what's in config
         P5 = Conv2D(config.TOP_DOWN_PYRAMID_SIZE, (1, 1), name='fpn_c5p5')(C5)
-        P4 = tf.add([UpSampling2D(size=(2, 2), name="fpn_p5upsampled")(P5),
+        P4 = add([UpSampling2D(size=(2, 2), name="fpn_p5upsampled")(P5),
                      Conv2D(config.TOP_DOWN_PYRAMID_SIZE, (1, 1), name='fpn_c4p4')(C4)])
-        P3 = tf.add([
+        P3 = add([
             UpSampling2D(size=(2, 2), name="fpn_p4upsampled")(P4),
             Conv2D(config.TOP_DOWN_PYRAMID_SIZE, (1, 1), name='fpn_c3p3')(C3)])
-        P2 = tf.add([UpSampling2D(size=(2, 2), name="fpn_p3upsampled")(P3),
+        P2 = add([UpSampling2D(size=(2, 2), name="fpn_p3upsampled")(P3),
                      Conv2D(config.TOP_DOWN_PYRAMID_SIZE, (1, 1), name='fpn_c2p2')(C2)])
         # Attach 3x3 conv to all P layers to get the final feature maps.
         P2 = Conv2D(config.TOP_DOWN_PYRAMID_SIZE, (3, 3), padding="SAME", name="fpn_p2")(P2)

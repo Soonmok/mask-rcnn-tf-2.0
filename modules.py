@@ -1,5 +1,5 @@
 import tensorflow as tf
-from tensorflow.keras.layers import BatchNormalization, Conv2D, Activation
+from tensorflow.keras.layers import BatchNormalization, Conv2D, Activation, add
 
 
 def identity_block(input_tensor, kernel_size, filters, stage, block,
@@ -32,7 +32,7 @@ def identity_block(input_tensor, kernel_size, filters, stage, block,
                use_bias=use_bias)(x)
     x = BatchNormalization(name=bn_name_base + '2c')(x, training=train_bn)
 
-    x = tf.add([x, input_tensor])
+    x = add([x, input_tensor])
     x = Activation('relu', name='res' + str(stage) + block + '_out')(x)
     return x
 
@@ -73,7 +73,7 @@ def conv_block(input_tensor, kernel_size, filters, stage, block,
                       name=conv_name_base + '1', use_bias=use_bias)(input_tensor)
     shortcut = BatchNormalization(name=bn_name_base + '1')(shortcut, training=train_bn)
 
-    x = tf.add([x, shortcut])
+    x = add([x, shortcut])
     x = Activation('relu', name='res' + str(stage) + block + '_out')(x)
     return x
 

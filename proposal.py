@@ -7,7 +7,7 @@ from modules import apply_box_deltas_graph, clip_boxes_graph
 from utils import parse_image_meta_graph, log2_graph
 
 
-class ProposalLayer(tf.keras.Layer):
+class ProposalLayer(tf.keras.layers.Layer):
     """Receives anchor scores and selects a subset to pass as proposals
     to the second stage. Filtering is done based on anchor scores and
     non-max suppression to remove overlaps. It also applies bounding
@@ -86,7 +86,7 @@ class ProposalLayer(tf.keras.Layer):
         return (None, self.proposal_count, 4)
 
 
-class PyramidROIAlign(tf.keras.Layer):
+class PyramidROIAlign(tf.keras.layers.Layer):
     """Implements ROI Pooling on multiple levels of the feature pyramid.
     Params:
     - pool_shape: [pool_height, pool_width] of the output pooled regions. Usually [7, 7]
