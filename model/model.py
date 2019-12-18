@@ -11,13 +11,13 @@ from tensorflow.keras.layers import Conv2D, Lambda, Input, UpSampling2D, MaxPool
 from tensorflow.keras.models import Model
 
 import utils
-from classifier import fpn_classifier_graph
-from data_loader import data_generator
-from detection import DetectionLayer, DetectionTargetLayer
-from loss import rpn_class_loss_graph, mrcnn_class_loss_graph, rpn_bbox_loss_graph, mrcnn_bbox_loss_graph, \
+from model.classifier import fpn_classifier_graph
+from data_loader.data_loader import data_generator
+from model.detection import DetectionLayer, DetectionTargetLayer
+from model.loss import rpn_class_loss_graph, mrcnn_class_loss_graph, rpn_bbox_loss_graph, mrcnn_bbox_loss_graph, \
     mrcnn_mask_loss_graph
-from proposal import rpn_graph, build_fpn_mask_graph, ProposalLayer
-from resnet import resnet_graph
+from model.proposal import rpn_graph, build_fpn_mask_graph, ProposalLayer
+from model.resnet import resnet_graph
 from utils import parse_image_meta_graph, log, norm_boxes_graph
 
 
@@ -49,7 +49,7 @@ class MaskRCNN():
     def __init__(self, mode, config, model_dir):
         """
         mode: Either "training" or "inference"
-        config: A Sub-class of the Config class
+        configs: A Sub-class of the Config class
         model_dir: Directory to save training logs and trained weights
         """
         assert mode in ['training', 'inference']
@@ -123,7 +123,7 @@ class MaskRCNN():
             _, C2, C3, C4, C5 = resnet_graph(input_image, config.BACKBONE,
                                              stage5=True, train_bn=config.TRAIN_BN)
         # Top-down Layers
-        # TODO: add assert to varify feature map sizes match what's in config
+        # TODO: add assert to varify feature map sizes match what's in configs
         P5 = Conv2D(config.TOP_DOWN_PYRAMID_SIZE, (1, 1), name='fpn_c5p5')(C5)
         P4 = add([UpSampling2D(size=(2, 2), name="fpn_p5upsampled")(P5),
                      Conv2D(config.TOP_DOWN_PYRAMID_SIZE, (1, 1), name='fpn_c4p4')(C4)])
@@ -278,9 +278,9 @@ class MaskRCNN():
                           name='mask_rcnn')
 
         # Add multi-GPU support.
-        # if config.GPU_COUNT > 1:
+        # if configs.GPU_COUNT > 1:
         #     from mrcnn.parallel_model import ParallelModel
-        #     model = ParallelModel(model, config.GPU_COUNT)
+        #     model = ParallelModel(model, configs.GPU_COUNT)
 
         return model
 

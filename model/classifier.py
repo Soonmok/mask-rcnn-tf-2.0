@@ -1,7 +1,7 @@
 import tensorflow.keras.backend as K
 from tensorflow.keras.layers import BatchNormalization, Conv2D, Activation, TimeDistributed, Lambda, Dense, Reshape
 
-from proposal import PyramidROIAlign
+from model.proposal import PyramidROIAlign
 
 
 def fpn_classifier_graph(rois, feature_maps, image_meta,
@@ -53,6 +53,7 @@ def fpn_classifier_graph(rois, feature_maps, image_meta,
                         name='mrcnn_bbox_fc')(shared)
     # Reshape to [batch, num_rois, NUM_CLASSES, (dy, dx, log(dh), log(dw))]
     s = K.int_shape(x)
-    mrcnn_bbox = Reshape((s[1], num_classes, 4), name="mrcnn_bbox")(x)
+    # TODO: Reshape was -> (s[1], num_classes, 4)
+    mrcnn_bbox = Reshape((-1, num_classes, 4), name="mrcnn_bbox")(x)
 
     return mrcnn_class_logits, mrcnn_probs, mrcnn_bbox

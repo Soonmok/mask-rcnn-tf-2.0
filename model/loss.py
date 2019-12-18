@@ -40,7 +40,7 @@ def rpn_class_loss_graph(rpn_match, rpn_class_logits):
 
 def rpn_bbox_loss_graph(config, target_bbox, rpn_match, rpn_bbox):
     """Return the RPN bounding box loss graph.
-    config: the model config object.
+    configs: the model configs object.
     target_bbox: [batch, max positive anchors, (dy, dx, log(dh), log(dw))].
         Uses 0 padding to fill in unsed bbox deltas.
     rpn_match: [batch, anchors, 1]. Anchor match type. 1=positive,

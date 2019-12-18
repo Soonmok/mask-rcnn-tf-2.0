@@ -1,6 +1,6 @@
 from tensorflow.keras.layers import BatchNormalization, Conv2D, Activation, MaxPooling2D, ZeroPadding2D
 
-from modules import conv_block, identity_block
+from model.modules import conv_block, identity_block
 
 
 def resnet_graph(input_image, architecture, stage5=False, train_bn=True):

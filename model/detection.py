@@ -2,7 +2,7 @@ import tensorflow as tf
 from utils import parse_image_meta_graph, trim_zeros_graph, norm_boxes_graph
 
 import utils
-from modules import apply_box_deltas_graph, clip_boxes_graph
+from model.modules import apply_box_deltas_graph, clip_boxes_graph
 
 
 def overlaps_graph(boxes1, boxes2):

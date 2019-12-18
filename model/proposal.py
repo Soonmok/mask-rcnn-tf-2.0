@@ -3,7 +3,7 @@ import tensorflow as tf
 from tensorflow.keras.layers import BatchNormalization, Conv2D, Activation, Lambda, TimeDistributed, Conv2DTranspose
 
 import utils
-from modules import apply_box_deltas_graph, clip_boxes_graph
+from model.modules import apply_box_deltas_graph, clip_boxes_graph
 from utils import parse_image_meta_graph, log2_graph
 
 

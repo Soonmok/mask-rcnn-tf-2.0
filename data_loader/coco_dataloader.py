@@ -5,10 +5,8 @@ import zipfile
 import numpy as np
 
 from pycocotools.coco import COCO
-from pycocotools.cocoeval import COCOeval
 from pycocotools import mask as maskUtils
-import utils
-from data_loader import Dataset
+from data_loader.data_loader import Dataset
 
 ROOT_DIR = os.path.abspath("../../")
 DEFAULT_LOGS_DIR = os.path.join(ROOT_DIR, "logs")

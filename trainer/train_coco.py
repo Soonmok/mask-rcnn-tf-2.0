@@ -25,9 +25,9 @@ import sys
 import imgaug  # https://github.com/aleju/imgaug (pip3 install imgaug)
 
 # Root directory of the project
-from coco_dataloader import CocoDataset
+from data_loader.data_loader import CocoDataset
 from coco_evaluate import evaluate_coco
-from model import MaskRCNN
+from model.model import MaskRCNN
 
 # Download and install the Python COCO tools from https://github.com/waleedka/coco
 # That's a fork from the original https://github.com/pdollar/coco with a bug
@@ -40,7 +40,7 @@ ROOT_DIR = os.path.abspath("../../")
 
 # Import Mask RCNN
 sys.path.append(ROOT_DIR)  # To find local version of the library
-from config import CocoConfig
+from configs.coco_config import CocoConfig
 
 # Path to trained weights file
 COCO_MODEL_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")

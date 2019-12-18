@@ -590,7 +590,7 @@ def data_generator(dataset, config, shuffle=True, augment=False, augmentation=No
     """A generator that returns images and corresponding target class ids,
     bounding box deltas, and masks.
     dataset: The Dataset object to pick data from
-    config: The model config object
+    configs: The model configs object
     shuffle: If True, shuffles the samples before every epoch
     augment: (deprecated. Use augmentation instead). If true, apply random
         image augmentation. Currently, only horizontal flipping is offered.
