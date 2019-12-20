@@ -322,11 +322,8 @@ class MaskRCNN():
         import h5py
         # Conditional import to support versions of Keras before 2.2
         # TODO: remove in about 6 months (end of 2018)
-        try:
-            from keras.engine import saving
-        except ImportError:
-            # Keras before 2.2 used the 'topology' namespace.
-            from keras.engine import topology as saving
+
+        from tensorflow.python.keras import saving
 
         if exclude:
             by_name = True
@@ -388,20 +385,20 @@ class MaskRCNN():
             "mrcnn_class_loss", "mrcnn_bbox_loss", "mrcnn_mask_loss"]
         for name in loss_names:
             layer = self.keras_model.get_layer(name)
-            if layer.output in self.keras_model.losses:
+            if tf.reduce_any(input_tensor=[layer.output is loss for loss in self.keras_model.losses]):
                 continue
             loss = (
-                    tf.reduce_mean(layer.output, keepdims=True)
+                    tf.reduce_mean(input_tensor=layer.output, keepdims=True)
                     * self.config.LOSS_WEIGHTS.get(name, 1.))
-            self.keras_model.add_loss(loss)
+            self.keras_model.add_loss(lambda: loss)
 
         # Add L2 Regularization
         # Skip gamma and beta weights of batch normalization layers.
         reg_losses = [
-            tf.keras.regularizers.l2(self.config.WEIGHT_DECAY)(w) / tf.cast(tf.size(w), tf.float32)
+            tf.keras.regularizers.l2(self.config.WEIGHT_DECAY)(w) / tf.cast(tf.size(input=w), tf.float32)
             for w in self.keras_model.trainable_weights
             if 'gamma' not in w.name and 'beta' not in w.name]
-        self.keras_model.add_loss(tf.add_n(reg_losses))
+        self.keras_model.add_loss(lambda: tf.add_n(reg_losses))
 
         # Compile
         self.keras_model.compile(
@@ -417,7 +414,7 @@ class MaskRCNN():
             loss = (
                     tf.reduce_mean(layer.output, keepdims=True)
                     * self.config.LOSS_WEIGHTS.get(name, 1.))
-            self.keras_model.metrics_tensors.append(loss)
+            self.keras_model.metrics.append(loss)
 
     def set_trainable(self, layer_regex, keras_model=None, indent=0, verbose=1):
         """Sets model layers as trainable if their names match

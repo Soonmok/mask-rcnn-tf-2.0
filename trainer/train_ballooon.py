@@ -25,6 +25,9 @@ import json
 import datetime
 import numpy as np
 import skimage.draw
+import skimage.io
+import tensorflow as tf
+
 
 # Root directory of the project
 ROOT_DIR = os.path.abspath("../../")
@@ -325,6 +328,7 @@ if __name__ == '__main__':
         model = MaskRCNN(mode="inference", config=config,
                                   model_dir=args.logs)
 
+    print(model.keras_model.summary())
     # Select weights file to load
     if args.weights.lower() == "coco":
         weights_path = COCO_WEIGHTS_PATH

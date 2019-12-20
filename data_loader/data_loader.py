@@ -2,6 +2,7 @@ import logging
 import random
 
 import numpy as np
+import skimage.io
 
 import utils
 
